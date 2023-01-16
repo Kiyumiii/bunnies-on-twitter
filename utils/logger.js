@@ -23,7 +23,7 @@ function write(content, tagColor, bgTagColor, tag, error = false) {
     const item = format
         .replace("{tstamp}", chalk.gray(timestamp))
         .replace("{tag}", chalk[bgTagColor][tagColor](logTag))
-        .replace("{txt}", chalk.white(` ${content}`));
+        .replace("{txt}", chalk.white(`${content}`));
 
     stream.write(item);
 }

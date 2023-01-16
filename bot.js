@@ -7,9 +7,8 @@ const logger = require("./utils/logger.js");
 const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
 const ffprobe = require("@ffprobe-installer/ffprobe");
 const ffmpeg = require("fluent-ffmpeg")()
-  .setFfprobePath(ffprobe.path)
-  .setFfmpegPath(ffmpegInstaller.path);
-
+    .setFfprobePath(ffprobe.path)
+    .setFfmpegPath(ffmpegInstaller.path);
 
 const bunnyAPI = async () => {
     try {
@@ -19,45 +18,45 @@ const bunnyAPI = async () => {
     } catch (err) {
         logger.error(err);
     }
-} 
+}
 
 const tweetTheBunny = async () => {
     const bunnyLink = await bunnyAPI();
-    if(!bunnyLink) return console.log("No bunny link!");
-    
+    if (!bunnyLink) return console.log("No bunny link!");
+
     await downloadImage(bunnyLink, "./rabbit.gif");
     gifSize = fileSize("./rabbit.gif");
 
     //If the size of the gif is too big
     if (gifSize >= 15728640) {
-        await ffmpeg
+        ffmpeg
             .input('./rabbit.gif')
             .noAudio()
             .videoCodec("libx264")
             .output(`./rabbit.mp4`)
             .preset('divx')
             .on("end", async () => {
-                await logger.info("Successful video generation ✔️")
+                logger.info("Successful video generation ✔️")
                 let mediaId = await client.v1.uploadMedia("./rabbit.mp4", { longVideo: true });
-                await logger.info("Successfully uploaded on Twitter services ✔️")
+                logger.info("Successfully uploaded on Twitter services ✔️")
                 await client.v1.tweet("", { media_ids: mediaId });
-                await logger.success("Tweet sent! 🐰")
+                logger.success("Tweet sent! 🐰")
             })
             .on("error", (e) => logger.error(e))
             .run();
 
-            console.log(mediaId);
+        console.log(mediaId);
     } else {
         let mediaId = await client.v1.uploadMedia("./rabbit.gif");
-        await logger.info("Successfully uploaded on Twitter services ✔️")
+        logger.info("Successfully uploaded on Twitter services ✔️")
         await client.v1.tweet("", { media_ids: mediaId });
-        await logger.success("Tweet sent! 🐰")
+        logger.success("Tweet sent! 🐰")
     }
 }
 
 setInterval(function() {
     var date = new Date();
-    if(date.getMinutes() === 0){ 
+    if (date.getMinutes() === 0) {
         tweetTheBunny();
     }
 }, 60000);
@@ -77,7 +76,7 @@ async function downloadImage(imgUrl, filepath) {
             .once('close', () => {
                 logger.info("Successful GIF download ✔️")
                 resolve(filepath)
-            }); 
+            });
     });
 }
 
@@ -85,3 +84,5 @@ function fileSize(path) {
     let stats = fs.statSync(path);
     return stats.size;
 }
+
+logger.info("I am on! 🐰")
