@@ -13,6 +13,8 @@
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^1.4.1",
     "axios": "^1.2.2",
+    "chalk": "^4.1.2",
+    "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "fluent-ffmpeg": "^2.1.2",
     "twitter-api-v2": "^1.14.0"
